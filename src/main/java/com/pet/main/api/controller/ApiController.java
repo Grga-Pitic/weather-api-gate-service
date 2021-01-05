@@ -22,9 +22,10 @@ public class ApiController {
 	private WeatherClientFactory clientFactory;
 	
 	@RequestMapping("/api/get")
-	public Object getByCity(@RequestParam(name="type", required=true) String type) {
+	public Object getByCity(@RequestParam(name="type", required=true) String type,
+							@RequestParam(name="cityName", required=true) String cityName) {
 		try {
-			return clientFactory.createClient(WeatherClientType.valueOf(type.toUpperCase())).getWeatherInfo();
+			return clientFactory.createClient(WeatherClientType.valueOf(type.toUpperCase())).getWeatherInfo(cityName);
 		} catch (IllegalArgumentException e) {
 			Map<String, String> body = new HashMap<String, String>();
 			body.put("message", "Error: api type not found. Error: " + e.getMessage());

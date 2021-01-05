@@ -24,7 +24,7 @@ public class OpenWeatherMapClient implements IWeatherClient {
 	public static final WeatherClientType type = WeatherClientType.OPEN_WEATHER_MAP;
 	
 	private static final String URL = 
-			"http://api.openweathermap.org/data/2.5/weather?q=Smolensk&units=metric&lang=ru";
+			"http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ru";
 	
 	@Autowired
 	private RestTemplateBuilder httpClientBuilder;
@@ -33,11 +33,11 @@ public class OpenWeatherMapClient implements IWeatherClient {
 	private ApiRepository apiRepository;
 	
 	@Override
-	public WeatherInfo getWeatherInfo() throws IOException {
+	public WeatherInfo getWeatherInfo(String cityName) throws IOException {
 		RestTemplate httpClient = httpClientBuilder.build();
 		try {
-			String token = apiRepository.findByName("type.toString()").get(0).getToken();
-			String preparedUrl = URL + "&appid=" + token;
+			String token = apiRepository.findByName(type.toString()).get(0).getToken();
+			String preparedUrl = URL + "&appid=" + token + "&q=" + cityName;
 			
 			OpenWeatherMapResponse response =
 					httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);
