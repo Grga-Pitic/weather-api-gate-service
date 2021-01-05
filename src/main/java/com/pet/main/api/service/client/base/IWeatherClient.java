@@ -1,7 +1,11 @@
 package com.pet.main.api.service.client.base;
 
+import java.io.IOException;
+
+import com.pet.main.api.model.WeatherInfo;
+
 public interface IWeatherClient {
 
-	String getMessage();
+	WeatherInfo getWeatherInfo() throws IOException;
 	
 }
