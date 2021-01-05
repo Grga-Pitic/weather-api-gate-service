@@ -14,23 +14,33 @@ import org.springframework.web.client.UnknownHttpStatusCodeException;
 
 import com.pet.main.api.model.WeatherInfo;
 import com.pet.main.api.model.response.OpenWeatherMapResponse;
+import com.pet.main.api.repository.ApiRepository;
 import com.pet.main.api.service.client.base.IWeatherClient;
+import com.pet.main.api.service.client.base.WeatherClientType;
 
 @Component
 public class OpenWeatherMapClient implements IWeatherClient {
 	
+	public static final WeatherClientType type = WeatherClientType.OPEN_WEATHER_MAP;
+	
 	private static final String URL = 
-			"http://api.openweathermap.org/data/2.5/weather?q=Smolensk&appid=14be897f3f9d2a00cb033f0ba82e9bcf 1&units=metric&lang=ru";
+			"http://api.openweathermap.org/data/2.5/weather?q=Smolensk&units=metric&lang=ru";
 	
 	@Autowired
 	private RestTemplateBuilder httpClientBuilder;
+	
+	@Autowired
+	private ApiRepository apiRepository;
 	
 	@Override
 	public WeatherInfo getWeatherInfo() throws IOException {
 		RestTemplate httpClient = httpClientBuilder.build();
 		try {
+			String token = apiRepository.findByName("type.toString()").get(0).getToken();
+			String preparedUrl = URL + "&appid=" + token;
+			
 			OpenWeatherMapResponse response =
-					httpClient.getForObject(URL, OpenWeatherMapResponse.class);
+					httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);
 			
 			Map<String, String> data = new HashMap<String, String>();
 			
@@ -46,6 +56,8 @@ public class OpenWeatherMapClient implements IWeatherClient {
 				| HttpServerErrorException 
 				| UnknownHttpStatusCodeException e) {
 			throw new IOException(e.getMessage());
+		} catch (IndexOutOfBoundsException e) {
+			throw new IOException("Token for api '" + type.toString() + "' not found");
 		}
 	}
 
