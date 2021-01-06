@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.pet.main.api.service.client.OpenWeatherMapClient;
+import com.pet.main.api.service.client.WeatherbitClient;
 import com.pet.main.api.service.client.base.IWeatherClient;
 import com.pet.main.api.service.client.base.WeatherClientType;
 
@@ -18,6 +19,8 @@ public class WeatherClientFactory {
 		switch (type) {
 		case OPEN_WEATHER_MAP:
 			return context.getBean(OpenWeatherMapClient.class);
+		case WEATHERBIT:
+			return context.getBean(WeatherbitClient.class);
 			
 		default:
 			return context.getBean(OpenWeatherMapClient.class);
