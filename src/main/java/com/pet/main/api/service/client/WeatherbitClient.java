@@ -22,46 +22,46 @@ import com.pet.main.api.service.client.base.WeatherClientType;
 @Component
 public class WeatherbitClient implements IWeatherClient {
 
-	public static final WeatherClientType type = WeatherClientType.WEATHERBIT;
-	
-	private static final String URL = 
-			"http://api.weatherbit.io/v2.0/current";
-	
-	@Autowired
-	private RestTemplateBuilder httpClientBuilder;
-	
-	@Autowired
-	private ApiRepository apiRepository;
-	
-	@Override
-	public WeatherInfo getWeatherInfo(String cityName) throws IOException {
-		RestTemplate httpClient = httpClientBuilder
-				.errorHandler(new WeatherbitErrorHandler())
-				.build();
-		try {
-			String token = apiRepository.findByName(type.toString()).get(0).getToken();
-			String preparedUrl = URL + "?lang=ru" + "&key=" + token + "&city=" + cityName;
-			
-			WeatherbipResponse response =
-					httpClient.getForObject(preparedUrl, WeatherbipResponse.class);
-			
-			Map<String, String> data = new HashMap<String, String>();
-			
-			// TODO move to response model
-			data.put("name", (String) response.getData().get(0).get("city_name"));
-			data.put("temperature", Double.toString(((double) response.getData().get(0).get("temp"))));
-			data.put("feelsLike", Double.toString((double) response.getData().get(0).get("app_temp")));
-			data.put("pressure", Double.toString((double) response.getData().get(0).get("pres")));
-			data.put("weatherDescription", (String)((Map<String, Object>) response.getData().get(0).get("weather")).get("description"));
-			data.put("windSpeed", Double.toString((double) response.getData().get(0).get("wind_spd")));
-			
-			return new WeatherInfo(data);
-		} catch (HttpClientErrorException 
-				| HttpServerErrorException 
-				| UnknownHttpStatusCodeException e) {
-			throw new IOException(e.getMessage());
-		} catch (IndexOutOfBoundsException e) {
-			throw new IOException("Token for api '" + type.toString() + "' not found");
-		}
-	}
+    public static final WeatherClientType type = WeatherClientType.WEATHERBIT;
+
+    private static final String URL =
+            "http://api.weatherbit.io/v2.0/current";
+
+    @Autowired
+    private RestTemplateBuilder httpClientBuilder;
+
+    @Autowired
+    private ApiRepository apiRepository;
+
+    @Override
+    public WeatherInfo getWeatherInfo(String cityName) throws IOException {
+        RestTemplate httpClient = httpClientBuilder
+                .errorHandler(new WeatherbitErrorHandler())
+                .build();
+        try {
+            String token = apiRepository.findByName(type.toString()).get(0).getToken();
+            String preparedUrl = URL + "?lang=ru" + "&key=" + token + "&city=" + cityName;
+
+            WeatherbipResponse response =
+                    httpClient.getForObject(preparedUrl, WeatherbipResponse.class);
+
+            Map<String, String> data = new HashMap<String, String>();
+
+            // TODO move to response model
+            data.put("name", (String) response.getData().get(0).get("city_name"));
+            data.put("temperature", Double.toString(((double) response.getData().get(0).get("temp"))));
+            data.put("feelsLike", Double.toString((double) response.getData().get(0).get("app_temp")));
+            data.put("pressure", Double.toString((double) response.getData().get(0).get("pres")));
+            data.put("weatherDescription", (String)((Map<String, Object>) response.getData().get(0).get("weather")).get("description"));
+            data.put("windSpeed", Double.toString((double) response.getData().get(0).get("wind_spd")));
+
+            return new WeatherInfo(data);
+        } catch (HttpClientErrorException
+                | HttpServerErrorException
+                | UnknownHttpStatusCodeException e) {
+            throw new IOException(e.getMessage());
+        } catch (IndexOutOfBoundsException e) {
+            throw new IOException("Token for api '" + type.toString() + "' not found");
+        }
+    }
 }

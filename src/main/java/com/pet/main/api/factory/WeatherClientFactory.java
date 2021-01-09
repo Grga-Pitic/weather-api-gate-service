@@ -11,20 +11,20 @@ import com.pet.main.api.service.client.base.WeatherClientType;
 
 @Component
 public class WeatherClientFactory {
-	
-	@Autowired
-	private ApplicationContext context;
-	
-	public IWeatherClient createClient(WeatherClientType type) {
-		switch (type) {
-		case OPEN_WEATHER_MAP:
-			return context.getBean(OpenWeatherMapClient.class);
-		case WEATHERBIT:
-			return context.getBean(WeatherbitClient.class);
-			
-		default:
-			return context.getBean(OpenWeatherMapClient.class);
-		}
-		
-	}
+
+    @Autowired
+    private ApplicationContext context;
+
+    public IWeatherClient createClient(WeatherClientType type) {
+        switch (type) {
+            case OPEN_WEATHER_MAP:
+                return context.getBean(OpenWeatherMapClient.class);
+            case WEATHERBIT:
+                return context.getBean(WeatherbitClient.class);
+
+            default:
+                return context.getBean(OpenWeatherMapClient.class);
+        }
+
+    }
 }

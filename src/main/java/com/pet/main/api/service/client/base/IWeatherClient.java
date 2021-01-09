@@ -6,6 +6,6 @@ import com.pet.main.api.model.WeatherInfo;
 
 public interface IWeatherClient {
 
-	WeatherInfo getWeatherInfo(String cityName) throws IOException;
-	
+    WeatherInfo getWeatherInfo(String cityName) throws IOException;
+
 }

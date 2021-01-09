@@ -20,45 +20,45 @@ import com.pet.main.api.service.client.base.WeatherClientType;
 
 @Component
 public class OpenWeatherMapClient implements IWeatherClient {
-	
-	public static final WeatherClientType type = WeatherClientType.OPEN_WEATHER_MAP;
-	
-	private static final String URL = 
-			"http://api.openweathermap.org/data/2.5/weather";
-	
-	@Autowired
-	private RestTemplateBuilder httpClientBuilder;
-	
-	@Autowired
-	private ApiRepository apiRepository;
-	
-	@Override
-	public WeatherInfo getWeatherInfo(String cityName) throws IOException {
-		RestTemplate httpClient = httpClientBuilder.build();
-		try {
-			String token = apiRepository.findByName(type.toString()).get(0).getToken();
-			String preparedUrl = URL + "?units=metric&lang=ru" + "&appid=" + token + "&q=" + cityName;
-			
-			OpenWeatherMapResponse response =
-					httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);
-			
-			Map<String, String> data = new HashMap<String, String>();
-			
-			data.put("name", response.getName());
-			data.put("temperature", response.getMain().get("temp"));
-			data.put("feelsLike", response.getMain().get("feels_like"));
-			data.put("pressure", response.getMain().get("pressure"));
-			data.put("weatherDescription", response.getWeather().get(0).get("description"));
-			data.put("windSpeed", response.getWind().get("speed"));
-			
-			return new WeatherInfo(data);
-		} catch (HttpClientErrorException 
-				| HttpServerErrorException 
-				| UnknownHttpStatusCodeException e) {
-			throw new IOException(e.getMessage());
-		} catch (IndexOutOfBoundsException e) {
-			throw new IOException("Token for api '" + type.toString() + "' not found");
-		}
-	}
+
+    public static final WeatherClientType type = WeatherClientType.OPEN_WEATHER_MAP;
+
+    private static final String URL =
+            "http://api.openweathermap.org/data/2.5/weather";
+
+    @Autowired
+    private RestTemplateBuilder httpClientBuilder;
+
+    @Autowired
+    private ApiRepository apiRepository;
+
+    @Override
+    public WeatherInfo getWeatherInfo(String cityName) throws IOException {
+        RestTemplate httpClient = httpClientBuilder.build();
+        try {
+            String token = apiRepository.findByName(type.toString()).get(0).getToken();
+            String preparedUrl = URL + "?units=metric&lang=ru" + "&appid=" + token + "&q=" + cityName;
+
+            OpenWeatherMapResponse response =
+                    httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);
+
+            Map<String, String> data = new HashMap<String, String>();
+
+            data.put("name", response.getName());
+            data.put("temperature", response.getMain().get("temp"));
+            data.put("feelsLike", response.getMain().get("feels_like"));
+            data.put("pressure", response.getMain().get("pressure"));
+            data.put("weatherDescription", response.getWeather().get(0).get("description"));
+            data.put("windSpeed", response.getWind().get("speed"));
+
+            return new WeatherInfo(data);
+        } catch (HttpClientErrorException
+                | HttpServerErrorException
+                | UnknownHttpStatusCodeException e) {
+            throw new IOException(e.getMessage());
+        } catch (IndexOutOfBoundsException e) {
+            throw new IOException("Token for api '" + type.toString() + "' not found");
+        }
+    }
 
 }

@@ -9,24 +9,24 @@ import javax.persistence.Table;
 @Table(name = "api")
 public class Api {
 
-	@Id
-	private int id;
-	
-	@Column(unique=true)
-	private String name;
-	
-	private String token;
-	
-	public int getId() {
-		return id;
-	}
+    @Id
+    private int id;
 
-	public String getName() {
-		return name;
-	}
+    @Column(unique=true)
+    private String name;
 
-	public String getToken() {
-		return token;
-	}
-	
+    private String token;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
 }
