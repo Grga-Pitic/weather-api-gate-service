@@ -24,7 +24,7 @@ public class OpenWeatherMapClient implements IWeatherClient {
 	public static final WeatherClientType type = WeatherClientType.OPEN_WEATHER_MAP;
 	
 	private static final String URL = 
-			"http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ru";
+			"http://api.openweathermap.org/data/2.5/weather";
 	
 	@Autowired
 	private RestTemplateBuilder httpClientBuilder;
@@ -37,7 +37,7 @@ public class OpenWeatherMapClient implements IWeatherClient {
 		RestTemplate httpClient = httpClientBuilder.build();
 		try {
 			String token = apiRepository.findByName(type.toString()).get(0).getToken();
-			String preparedUrl = URL + "&appid=" + token + "&q=" + cityName;
+			String preparedUrl = URL + "?units=metric&lang=ru" + "&appid=" + token + "&q=" + cityName;
 			
 			OpenWeatherMapResponse response =
 					httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);

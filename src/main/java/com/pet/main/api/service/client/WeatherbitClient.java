@@ -25,7 +25,7 @@ public class WeatherbitClient implements IWeatherClient {
 	public static final WeatherClientType type = WeatherClientType.WEATHERBIT;
 	
 	private static final String URL = 
-			"http://api.weatherbit.io/v2.0/current?lang=ru";
+			"http://api.weatherbit.io/v2.0/current";
 	
 	@Autowired
 	private RestTemplateBuilder httpClientBuilder;
@@ -40,7 +40,7 @@ public class WeatherbitClient implements IWeatherClient {
 				.build();
 		try {
 			String token = apiRepository.findByName(type.toString()).get(0).getToken();
-			String preparedUrl = URL + "&key=" + token + "&city=" + cityName;
+			String preparedUrl = URL + "?lang=ru" + "&key=" + token + "&city=" + cityName;
 			
 			WeatherbipResponse response =
 					httpClient.getForObject(preparedUrl, WeatherbipResponse.class);
