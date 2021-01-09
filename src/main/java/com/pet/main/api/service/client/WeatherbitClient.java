@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pet.main.api.service.client.error.handler.WeatherbitErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,9 @@ public class WeatherbitClient implements IWeatherClient {
 	
 	@Override
 	public WeatherInfo getWeatherInfo(String cityName) throws IOException {
-		RestTemplate httpClient = httpClientBuilder.build();
+		RestTemplate httpClient = httpClientBuilder
+				.errorHandler(new WeatherbitErrorHandler())
+				.build();
 		try {
 			String token = apiRepository.findByName(type.toString()).get(0).getToken();
 			String preparedUrl = URL + "&key=" + token + "&city=" + cityName;
