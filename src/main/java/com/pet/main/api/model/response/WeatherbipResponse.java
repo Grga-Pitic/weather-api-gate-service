@@ -1,17 +1,17 @@
 package com.pet.main.api.model.response;
 
-import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.pet.main.api.model.response.base.IWeatherInfo;
+import com.pet.main.api.model.response.base.WeatherInfo;
+import com.pet.main.api.model.response.deserializer.WeatherbitResponseDeserializer;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class WeatherbipResponse {
-	
-	private List<Map<String, Object>> data;
-	
-	public List<Map<String, Object>> getData() {
-		return data;
-	}
+@JsonDeserialize(using = WeatherbitResponseDeserializer.class)
+public class WeatherbipResponse extends WeatherInfo implements IWeatherInfo {
+
+    public WeatherbipResponse(Map<String, String> data) {
+        super(data);
+    }
 
 }

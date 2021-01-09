@@ -1,8 +1,9 @@
-package com.pet.main.api.model;
+package com.pet.main.api.model.response.base;
 
 import java.util.Map;
 
-public class WeatherInfo {
+
+public class WeatherInfo implements IWeatherInfo {
 
     private static final String[] FIELDS_NAMES = {
             "name",
