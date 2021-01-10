@@ -10,8 +10,8 @@ import com.pet.main.api.model.response.deserializer.OpenWeatherMapResponseDeseri
 @JsonDeserialize(using = OpenWeatherMapResponseDeserializer.class)
 public class OpenWeatherMapResponse extends WeatherInfo implements IWeatherInfo {
 
-	public OpenWeatherMapResponse(Map<String, String> data) {
-		super(data);
-	}
+    public OpenWeatherMapResponse(Map<String, String> data) {
+        super(data);
+    }
 
 }
