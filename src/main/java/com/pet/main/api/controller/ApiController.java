@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.pet.main.api.factory.WeatherClientFactory;
 import com.pet.main.api.service.client.base.WeatherClientType;
@@ -23,23 +21,23 @@ public class ApiController {
 
     @RequestMapping("/api/get")
     public Object getByCity(@RequestParam(name="type", required=true) String type,
-                            @RequestParam(name="cityName", required=true) String cityName) {
-        try {
-            return clientFactory.createClient(WeatherClientType.valueOf(type.toUpperCase())).getWeatherInfo(cityName);
-        } catch (IllegalArgumentException e) {
-            Map<String, String> body = new HashMap<String, String>();
-            body.put("message", "Error: api type not found. Error: " + e.getMessage());
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(body);
-        } catch (IOException e) {
-            Map<String, String> body = new HashMap<String, String>();
-            body.put("message", "Getiing data error: " + e.getMessage());
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(body);
-        }
+                            @RequestParam(name="cityName", required=true) String cityName) throws IllegalArgumentException, IOException {
+        return clientFactory.createClient(WeatherClientType.valueOf(type.toUpperCase())).getWeatherInfo(cityName);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleIOException(IllegalArgumentException e) {
+        Map<String, String> body = new HashMap<String, String>();
+        body.put("message", "Getiing data error: " + e.getMessage());
+        return body;
+    }
+
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleIOException(IOException e) {
+        Map<String, String> body = new HashMap<String, String>();
+        body.put("message", "Getiing data error: " + e.getMessage());
+        return body;
     }
 }
