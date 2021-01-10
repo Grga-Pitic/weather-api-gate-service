@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main:: main-fragment(
+                                                ~{:: content},
+                                                ~{:: menu},
+                                                ~{:: footer}
+                                               )}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<div th:fragment="menu">
+    Test menu
+</div>
+
+<div th:fragment="content" class="test">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="City name">
+        <select class="form-control">
+            <option value="" disabled selected>Select api type</option>
+            <option value="" th:each="api : ${apiList}" th:utext="${api}" th:value="${api}"></option>
+        </select>
+
+        <input type="button" value="test" class="btn btn-primary">
+    </div>
+
+</div>
+
+<div th:fragment="footer">
+    Footer on the index page
+</div>
+</body>
+
+</html>
