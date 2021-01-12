@@ -14,15 +14,52 @@
     Test menu
 </div>
 
-<div th:fragment="content" class="test">
+<div th:fragment="content">
     <div class="form-group">
-        <input type="text" class="form-control" placeholder="City name">
-        <select class="form-control">
+        <input type="text" class="form-control city-name" placeholder="City name">
+        <select class="form-control api-type">
             <option value="" disabled selected>Select api type</option>
             <option value="" th:each="api : ${apiList}" th:utext="${api}" th:value="${api}"></option>
         </select>
 
-        <input type="button" value="test" class="btn btn-primary">
+        <input type="button" value="test" class="btn btn-primary btn-load-weather">
+
+        <table class="table result">
+            <thead class="thead-dark">
+                <tr>
+                    <td scope="col">Поле</td>
+                    <td scope="col">Значение</td>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr>
+                    <td>Название</td>
+                    <td class="field-name"></td>
+                </tr>
+                <tr>
+                    <td>Температура</td>
+                    <td class="field-temperature"></td>
+                </tr>
+                <tr>
+                    <td>Ощущается как</td>
+                    <td class="field-feels-like"></td>
+                </tr>
+                <tr>
+                    <td>Давление</td>
+                    <td class="field-pressure"></td>
+                </tr>
+                <tr>
+                    <td>Описание</td>
+                    <td class="field-description"></td>
+                </tr>
+                <tr>
+                    <td>Скорость ветра</td>
+                    <td class="field-wind-speed"></td>
+                </tr>
+            </tbody>
+
+        </table>
+
     </div>
 
 </div>
