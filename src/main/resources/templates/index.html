@@ -14,7 +14,7 @@
     Test menu
 </div>
 
-<div th:fragment="content">
+<div th:fragment="content" class="mt-4">
     <div class="form-group">
         <input type="text" class="form-control city-name" placeholder="City name">
         <select class="form-control api-type">
@@ -22,38 +22,38 @@
             <option value="" th:each="api : ${apiList}" th:utext="${api}" th:value="${api}"></option>
         </select>
 
-        <input type="button" value="test" class="btn btn-primary btn-load-weather">
+        <input type="button" value="Get" class="btn btn-primary btn-load-weather">
 
-        <table class="table result">
+        <table class="table table-striped table-hover table-bordered table-sm result">
             <thead class="thead-dark">
                 <tr>
-                    <td scope="col">Поле</td>
-                    <td scope="col">Значение</td>
+                    <th scope="col">Field</th>
+                    <th scope="col">Value</th>
                 </tr>
             </thead>
             <tbody class="tbody">
                 <tr>
-                    <td>Название</td>
+                    <td>Name</td>
                     <td class="field-name"></td>
                 </tr>
                 <tr>
-                    <td>Температура</td>
+                    <td>Temperature</td>
                     <td class="field-temperature"></td>
                 </tr>
                 <tr>
-                    <td>Ощущается как</td>
+                    <td>Feels like</td>
                     <td class="field-feels-like"></td>
                 </tr>
                 <tr>
-                    <td>Давление</td>
+                    <td>Pressure</td>
                     <td class="field-pressure"></td>
                 </tr>
                 <tr>
-                    <td>Описание</td>
+                    <td>Description</td>
                     <td class="field-description"></td>
                 </tr>
                 <tr>
-                    <td>Скорость ветра</td>
+                    <td>Wind speed</td>
                     <td class="field-wind-speed"></td>
                 </tr>
             </tbody>
