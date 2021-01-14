@@ -3,7 +3,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/api/get',
             dataType: 'json',
-            method: 'get',
+            method: 'post',
             data: {
                 cityName: $('.city-name').val(),
                 type: $('.api-type').val(),

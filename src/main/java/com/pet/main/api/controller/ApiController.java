@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pet.main.api.model.WeatherForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,8 @@ public class ApiController {
     private WeatherClientFactory clientFactory;
 
     @RequestMapping("/api/get")
-    public Object getByCity(@RequestParam(name="type", required=true) String type,
-                            @RequestParam(name="cityName", required=true) String cityName) throws IllegalArgumentException, IOException {
-        return clientFactory.createClient(WeatherClientType.valueOf(type.toUpperCase())).getWeatherInfo(cityName);
+    public Object getByCity(@ModelAttribute WeatherForm data) throws IllegalArgumentException, IOException {
+        return clientFactory.createClient(WeatherClientType.valueOf(data.getType().toUpperCase())).getWeatherInfo(data.getCityName());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
