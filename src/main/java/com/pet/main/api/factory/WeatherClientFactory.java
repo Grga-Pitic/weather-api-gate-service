@@ -15,6 +15,10 @@ public class WeatherClientFactory {
     @Autowired
     private ApplicationContext context;
 
+    /**
+     * @param type
+     * @return - concrete api client.
+     */
     public IWeatherClient createClient(WeatherClientType type) {
         switch (type) {
             case OPEN_WEATHER_MAP:

@@ -18,6 +18,14 @@ public class ApiController {
     @Autowired
     private WeatherClientFactory clientFactory;
 
+
+    /**
+     * Gets city name and API type. Returns weather info by city.
+     * @param data - data from WeatherForm
+     * @return WeatherInfo
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
     @RequestMapping("/api/get")
     public Object getByCity(@ModelAttribute WeatherForm data) throws IllegalArgumentException, IOException {
         return clientFactory.createClient(WeatherClientType.valueOf(data.getType().toUpperCase())).getWeatherInfo(data.getCityName());

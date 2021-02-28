@@ -5,6 +5,9 @@ import org.springframework.web.client.*;
 
 import java.io.IOException;
 
+/**
+ * Custom error handler for Weatherbit API
+ */
 public class WeatherbitErrorHandler extends DefaultResponseErrorHandler implements ResponseErrorHandler {
 
     @Override

@@ -26,6 +26,10 @@ public class WeatherInfo implements IWeatherInfo {
 
     private String windSpeed;
 
+    /**
+     *
+     * @param data - must contains keys "name", "temperature", "feelsLike", "pressure", "weatherDescription", "windSpeed"
+     */
     public WeatherInfo(Map<String, String> data) {
         validate(data);
 
