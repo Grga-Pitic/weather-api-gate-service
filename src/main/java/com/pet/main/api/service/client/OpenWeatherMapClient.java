@@ -1,15 +1,15 @@
 package com.pet.main.api.service.client;
 
-import java.io.IOException;
+import java.util.List;
 
+import com.pet.main.api.exception.TokenNotFoundException;
+import com.pet.main.api.exception.WeatherApiException;
+import com.pet.main.api.model.Api;
 import com.pet.main.api.model.response.base.IWeatherInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.UnknownHttpStatusCodeException;
+import org.springframework.web.client.*;
 
 import com.pet.main.api.model.response.OpenWeatherMapResponse;
 import com.pet.main.api.repository.ApiRepository;
@@ -31,20 +31,19 @@ public class OpenWeatherMapClient implements IWeatherClient {
     private ApiRepository apiRepository;
 
     @Override
-    public IWeatherInfo getWeatherInfo(String cityName) throws IOException {
+    public IWeatherInfo getWeatherInfo(String cityName) throws WeatherApiException {
         RestTemplate httpClient = httpClientBuilder.build();
-        try {
-            String token = apiRepository.findByName(type.toString()).get(0).getToken();
-            String preparedUrl = URL + "?units=metric&lang=ru" + "&appid=" + token + "&q=" + cityName;
+        List<Api> tokenList = apiRepository.findByName(type.toString());
 
-            return httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);
-        } catch (HttpClientErrorException
-                | HttpServerErrorException
-                | UnknownHttpStatusCodeException e) {
-            throw new IOException(e.getMessage());
-        } catch (IndexOutOfBoundsException e) {
-            throw new IOException("Token for api '" + type.toString() + "' not found");
+        if (tokenList.isEmpty()) {
+            throw new TokenNotFoundException("Token for api '" + type.toString() + "' not found");
         }
+
+        String token = tokenList.get(0).getToken();
+
+        String preparedUrl = URL + "?units=metric&lang=ru" + "&appid=" + token + "&q=" + cityName;
+
+        return httpClient.getForObject(preparedUrl, OpenWeatherMapResponse.class);
     }
 
 }

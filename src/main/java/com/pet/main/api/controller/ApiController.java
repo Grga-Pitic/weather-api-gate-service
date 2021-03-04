@@ -1,9 +1,9 @@
 package com.pet.main.api.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pet.main.api.exception.WeatherApiException;
 import com.pet.main.api.model.WeatherForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pet.main.api.factory.WeatherClientFactory;
 import com.pet.main.api.service.client.base.WeatherClientType;
+import org.springframework.web.client.RestClientResponseException;
 
 @RestController
 public class ApiController {
@@ -23,27 +24,28 @@ public class ApiController {
      * Gets city name and API type. Returns weather info by city.
      * @param data - data from WeatherForm
      * @return WeatherInfo
-     * @throws IllegalArgumentException
-     * @throws IOException
+     * @throws RestClientResponseException
+     * @throws WeatherApiException
      */
     @RequestMapping("/api/get")
-    public Object getByCity(@ModelAttribute WeatherForm data) throws IllegalArgumentException, IOException {
-        return clientFactory.createClient(WeatherClientType.valueOf(data.getType().toUpperCase())).getWeatherInfo(data.getCityName());
+    public Object getByCity(@ModelAttribute WeatherForm data) throws WeatherApiException, RestClientResponseException {
+        return clientFactory.createClient(data.getType()).getWeatherInfo(data.getCityName());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(RestClientResponseException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> handleIOException(IllegalArgumentException e) {
+    public Map<String, String> handleIOException(RestClientResponseException e) {
         Map<String, String> body = new HashMap<String, String>();
-        body.put("message", "Getiing data error: " + e.getMessage());
+        body.put("message", "Outer API http error: " + e.getMessage());
         return body;
     }
 
-    @ExceptionHandler(IOException.class)
+    @ExceptionHandler(WeatherApiException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> handleIOException(IOException e) {
+    public Map<String, String> handleIOException(WeatherApiException e) {
         Map<String, String> body = new HashMap<String, String>();
-        body.put("message", "Getiing data error: " + e.getMessage());
+        body.put("message", "Application error: " + e.getMessage());
         return body;
     }
+
 }
